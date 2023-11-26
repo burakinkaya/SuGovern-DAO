@@ -1,0 +1,67 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  color: #333; /* Slightly softer than black for better readability */
+  font-family: "Montserrat", sans-serif;
+  background: #f7f7f7; /* A light grey background can make the content stand out more */
+}
+
+a {
+  text-decoration: none;
+  color: #0056b3; /* A standard blue for links */
+  transition: color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+a:hover {
+  color: #004494; /* A darker shade of blue for hover state */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.page,
+.index-page {
+  width: 90%;
+  margin: 20px auto; /* Added some space on the top and bottom */
+  padding: 20px; /* Padding for inner spacing */
+  background: #fff; /* White background for the content area */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border-radius: 8px; /* Slightly rounded corners */
+}
+
+/* If .index-page is meant to be wider than .page */
+.index-page {
+  width: 80%;
+}
+
+/* Removed TODO comment and improved the .dao-page */
+.dao-page {
+  display: flex;
+  justify-content: start; /* Align to the start if there's extra space */
+  align-items: stretch; /* Stretch children to fill the height */
+}
+
+.sidebar {
+  position: absolute; /* Changed from absolute to fixed for better sidebar behavior */
+  width: 20vw;
+  min-width: 200px; /* A fixed min-width for better responsiveness */
+  height: auto; /* Full height sidebar */
+  padding: 20px;
+  padding-bottom: 50px; /* Inner spacing */
+  background: #e8e8e8; /* A light color for the sidebar */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow on the right side */
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 25vw; /* A bit wider on smaller screens for touch targets */
+  }
+
+  .page,
+  .index-page {
+    width: 95%; /* More width for content on smaller screens */
+  }
+}

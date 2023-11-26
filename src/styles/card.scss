@@ -1,0 +1,56 @@
+/* Increased specificity with an ID for example */
+/* Targeting the class now instead of ID */
+.top-dao-card {
+  width: 350px; /* Larger width */
+  height: 400px; /* Larger height */
+  background-color: #f4f4f4;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  overflow: hidden;
+  border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 2rem;
+
+  justify-content: space-between; /* Distribute space between children */
+}
+
+.item-card {
+  background-color: f4f4f4;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  overflow: hidden;
+  border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 2rem;
+  width: 250px; /* Fixed width */
+  height: 300px; /* Fixed height */
+  justify-content: space-between; /* Distribute space between children */
+}
+
+.item-card img {
+  width: 100%; /* This will make the image take the full width of the card */
+  height: 150px; /* Fixed height for all images */
+  object-fit: cover; /* This will cover the area of the div without stretching the image */
+  border-top-left-radius: 15px; /* Match the card's border radius */
+  border-top-right-radius: 15px; /* Match the card's border radius */
+}
+
+/* The rest of your CSS will remain the same for .item-card, .card-text, etc. */
+
+.card-text {
+  padding: 1rem;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+  flex-grow: 1; /* Allows the text section to expand and fill available space */
+}
+
+.card-title {
+  margin-top: 20px;
+  text-align: start;
+  color: #173a6a;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}

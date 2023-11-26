@@ -1,0 +1,149 @@
+/* General padding around the container for consistent spacing */
+.container {
+  padding: 0 2rem;
+}
+
+/* Main content area styling */
+.main {
+  min-height: 100vh;
+  padding: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff; /* A solid background for the main area */
+}
+
+/* Footer styling */
+.footer {
+  display: flex;
+  padding: 2rem 0;
+  border-top: 2px solid #dddddd; /* A lighter border color for subtlety */
+  justify-content: center;
+  align-items: center;
+  background: #f8f8f8; /* Slightly different background for footer */
+}
+
+/* Footer links */
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem; /* Padding for clickable area */
+  transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Footer links - hover state */
+.footer a:hover {
+  transform: translateY(-3px); /* Lift effect on hover */
+}
+
+/* Title link styling */
+.title a {
+  color: #0056b3; /* A different blue for a fresher look */
+  text-decoration: none;
+}
+
+/* Title link interaction states */
+.title a:hover,
+.title a:focus,
+.title a:active {
+  text-decoration: underline;
+  color: #003b70; /* Darker blue on interaction for contrast */
+}
+
+/* Title text styling */
+.title {
+  margin: 0;
+  line-height: 1.25;
+  font-size: 4.5rem; /* Slightly larger for impact */
+  font-weight: 600; /* Bolder for prominence */
+}
+
+/* Shared text alignment for title and description */
+.title,
+.description {
+  text-align: center;
+}
+
+/* Description styling for readability */
+.description {
+  margin: 4rem 0;
+  line-height: 1.5;
+  font-size: 1.5rem;
+  color: #555; /* Softer color for long reading */
+}
+
+/* Styling for code elements for emphasis */
+.code {
+  background: #eee; /* Lighter background for contrast */
+  border-radius: 5px;
+  padding: 1rem; /* More padding for visual effect */
+  font-size: 1.1rem;
+  font-family: "Courier New", monospace;
+}
+
+/* Grid system for layout */
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 800px;
+}
+
+/* Card component styling */
+.card {
+  margin: 1rem;
+  padding: 2rem; /* Increased padding for better readability */
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #ccc; /* Lighter border for subtlety */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Card interaction states */
+.card:hover,
+.card:focus,
+.card:active {
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
+}
+
+/* Card headings */
+.card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.75rem; /* Larger font size for headings */
+}
+
+/* Card paragraphs */
+.card p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+/* Logo styling */
+.logo {
+  height: 1em;
+  margin-left: 0.5rem;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .title {
+    font-size: 3rem; /* Adjust title size on smaller screens */
+  }
+
+  .description {
+    font-size: 1.25rem; /* Adjust description size on smaller screens */
+  }
+}

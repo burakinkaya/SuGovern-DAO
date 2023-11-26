@@ -1,0 +1,11 @@
+.main h1 {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 2.5em; /* slightly larger for more impact */
+  color: #4a4a4a; /* a softer color that is widely used for modern typography */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+  letter-spacing: 0.05em; /* add some spacing to improve readability */
+  font-weight: bold; /* make it bold to stand out */
+  margin-bottom: 0.5em; /* add some space below the heading */
+  text-transform: uppercase; /* style choice to make it uppercase */
+  line-height: 1.2; /* improve line spacing if your title wraps */
+}
