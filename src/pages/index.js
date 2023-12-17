@@ -40,6 +40,7 @@ export default function Home() {
     if (!loaded) {
       WalletConnect().then((res) => {
         setAccount(res);
+        console.log("account is ", res);
       });
       setLoaded(true);
       // if (!daoFactoryContract) {

@@ -207,7 +207,6 @@ async function DaoInfo(contract, address) {
 
   return retVal;
 }
-
 export {
   WalletConnect,
   DaoIsExist,

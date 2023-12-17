@@ -1,11 +1,11 @@
-export const DAO_ADDRESS = "0x5661Fa78DBeA88086292beac40dFeeb9b3f0B5b9";
+export const DAO_ADDRESS = "0x32659e469f74e65A7C3fcAea1fcA56042Cedff44";
 export const FACTORY_JSON = require("./blockchain1/build/contracts/DAOFactory.json");
 export const DAO_JSON = require("./blockchain1/build/contracts/MyDAO.json");
 export const TOKEN_JSON = require("./blockchain1/build/contracts/SUToken.json");
 export const LINE_COUNT = 4;
 export const RPC =
   "https://polygon-mumbai.g.alchemy.com/v2/qk87xs0xeViFziM8xyAckMpVat-e_32T";
-export const TOP_DAO = "0x40C8d672d954263c2Af729D2803c34DB8d83210C";
+export const TOP_DAO = "0x619141AC44a77B126B774a40a966891ca7754937";
 export const SUB_DAOS = [];
 export const params = [
   {

@@ -14,7 +14,12 @@ const TextBoxProposal = styled.div`
   font-size: 1em;
 `;
 
-const Proposals = ({ onGetAllProposals }) => {
+const Proposals = ({
+  onGetAllProposals,
+  onhandleAcceptClick,
+  onhandleRejectClick,
+  onhandlePendingClick,
+}) => {
   const [all_proposals, setall_proposals] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [isCollapsed, setCollapsed] = useState([]);
@@ -51,6 +56,23 @@ const Proposals = ({ onGetAllProposals }) => {
   };
   const proposalCard = (element, index) => {
     console.log(isCollapsed);
+
+    let statusIndex = element[index][7];
+    if (
+      statusIndex <= Number.MAX_SAFE_INTEGER &&
+      statusIndex >= Number.MIN_SAFE_INTEGER
+    ) {
+      statusIndex = Number(statusIndex);
+    }
+    let statusText = "";
+    if (statusIndex === 0) {
+      statusText = "Accepted";
+    } else if (statusIndex === 1) {
+      statusText = "Rejected";
+    } else {
+      statusText = "Pending";
+    }
+
     const votesAsNumbers = element[index][2].map((voteCount) =>
       Number(voteCount)
     );
@@ -64,6 +86,7 @@ const Proposals = ({ onGetAllProposals }) => {
             <div className="col-md">
               <label className="h4">{element[index][0]}</label>
               <br />
+
               <br />
             </div>
             <div className="col-md ">
@@ -73,6 +96,11 @@ const Proposals = ({ onGetAllProposals }) => {
                 onClick={() => changeCollapse(index)}
               >
                 Collapse
+              </button>
+              <button onClick={() => onhandleAcceptClick(index)}>Accept</button>
+              <button onClick={() => onhandleRejectClick(index)}>Reject</button>
+              <button onClick={() => onhandlePendingClick(index)}>
+                Pending
               </button>
             </div>
           </div>
@@ -153,6 +181,11 @@ const Proposals = ({ onGetAllProposals }) => {
                   ],
                 }}
               ></BarChart>
+            </div>
+            {/* Status column */}
+            <div className="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+              {/* Your status display */}
+              <span>Status: {statusText}</span>
             </div>
           </div>
         </div>

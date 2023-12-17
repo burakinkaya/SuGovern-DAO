@@ -65,6 +65,8 @@ export default function Dao() {
   const [isCorrect, setIsCorrect] = useState(false); //this is used to change between the tabs, we will set it when a user clicks on the buttons on the sidebar, in default it is set to 10, which is the view proposals tab
   const [ykBalance, setYkBalance] = useState(0);
   const [voterBalance, setVoterBalance] = useState(0);
+
+  const [proposalStatuses, setProposalStatuses] = useState({});
   //these are the data of the contracts that, we will use them in init() function
   //we will take the abi of the contracts from these files, and we will take the address of the contracts from the URL
   const setAlert = (err) => {
@@ -74,6 +76,7 @@ export default function Dao() {
   useEffect(() => {
     WalletConnect().then((res) => {
       setWalletAddress(res);
+      console.log("account is ", res);
     });
     if (address) {
       if (!contracts["daoFactoryContract"]) {
@@ -168,7 +171,8 @@ export default function Dao() {
               .catch((err) => setAlert(err));
             if (
               contracts["voterTokenContract"] &&
-              contracts["ykTokenContract"]
+              contracts["ykTokenContract"] &&
+              walletAddress
             ) {
               contracts["ykTokenContract"].methods
                 .balanceOf(String(walletAddress))
@@ -444,9 +448,80 @@ export default function Dao() {
           proposals[i][i].push(result[i]);
         })
         .catch((err) => setAlert(err));
+      await contracts.daoContract.methods
+        .proposals(i)
+        .call()
+        .then((proposal) => {
+          const status = proposal.status; // This will be an integer corresponding to the enum
+          proposals[i][i].push(status); // Push the status into the array at the correct index
+        })
+        .catch((err) => setAlert(err));
     }
 
     return proposals;
+  };
+
+  // Function to accept a proposal
+  async function acceptProposal(daoAddress, proposalId) {
+    const contract = BindContract(DAO_JSON.abi, daoAddress);
+    return contract.methods
+      .accept_proposal(proposalId)
+      .send({ from: walletAddress });
+  }
+
+  // Function to reject a proposal
+  async function rejectProposal(daoAddress, proposalId) {
+    const contract = BindContract(DAO_JSON.abi, daoAddress);
+    return contract.methods
+      .reject_proposal(proposalId)
+      .send({ from: walletAddress });
+  }
+
+  // Function to set a proposal to pending
+  async function pendingProposal(daoAddress, proposalId) {
+    const contract = BindContract(DAO_JSON.abi, daoAddress);
+    return contract.methods
+      .pending_proposal(proposalId)
+      .send({ from: walletAddress });
+  }
+
+  const handleAcceptClick = async (proposalId) => {
+    setTransactionInProgress(true);
+    try {
+      await acceptProposal(address, proposalId);
+      setAlertMessage({ title: "Success", text: "Proposal accepted" });
+      // You might want to update the state or re-fetch proposals here
+    } catch (error) {
+      setAlertMessage({ title: "Error", text: error.message });
+    }
+    setTransactionInProgress(false);
+    setPopupTrigger(true);
+  };
+
+  const handleRejectClick = async (proposalId) => {
+    setTransactionInProgress(true);
+    try {
+      await rejectProposal(address, proposalId);
+      setAlertMessage({ title: "Success", text: "Proposal rejected" });
+      // You might want to update the state or re-fetch proposals here
+    } catch (error) {
+      setAlertMessage({ title: "Error", text: error.message });
+    }
+    setTransactionInProgress(false);
+    setPopupTrigger(true);
+  };
+
+  const handlePendingClick = async (proposalId) => {
+    setTransactionInProgress(true);
+    try {
+      await pendingProposal(address, proposalId);
+      setAlertMessage({ title: "Success", text: "Proposal set to pending" });
+      // You might want to update the state or re-fetch proposals here
+    } catch (error) {
+      setAlertMessage({ title: "Error", text: error.message });
+    }
+    setTransactionInProgress(false);
+    setPopupTrigger(true);
   };
 
   //send voter tokens of given amount to another address, passed into SendVoterTokens.js tab
@@ -459,9 +534,7 @@ export default function Dao() {
         String(address),
         parseInt(amount)
       )
-      .send({
-        from: walletAddress,
-      })
+      .send({ from: walletAddress })
       .then(() => {
         setAlertMessage({ text: "Successfully sent tokens", title: "Success" });
         setPopupTrigger(true);
@@ -986,7 +1059,12 @@ export default function Dao() {
         onGetAllProposals={getAllProposals}
       ></VoteOnProposals>
     ) : selectedNavItem === 10 ? (
-      <Proposals onGetAllProposals={getAllProposals}></Proposals>
+      <Proposals
+        onGetAllProposals={getAllProposals}
+        onhandleAcceptClick={handleAcceptClick}
+        onhandleRejectClick={handleRejectClick}
+        onhandlePendingClick={handlePendingClick}
+      ></Proposals>
     ) : selectedNavItem === 11 ? (
       <ViewSubDAOs
         onGetDAODescription={getDaoDescription}
@@ -1004,6 +1082,16 @@ export default function Dao() {
       <></>
     );
   };
+
+  if (!walletAddress) {
+    // User has not connected their wallet yet
+    return (
+      <div className={styles.walletconnectprompt}>
+        <p>Please connect your wallet to interact with the DAO.</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.main}>
       <Head>
@@ -1021,6 +1109,8 @@ export default function Dao() {
                 setSelectedNavItem={setSelectedNavItem}
                 selectedNavItem={selectedNavItem}
                 status={"admin"}
+                ykBalance={ykBalance}
+                voterBalance={voterBalance}
               />
               <div className="container" style={{ padding: "30px" }}>
                 <div className="row">
