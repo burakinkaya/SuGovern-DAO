@@ -24,9 +24,7 @@ const CreateChildDAO = ({ onCreateChildDAO }) => {
           <input
             type="name"
             onChange={(e) => {
-              {
-                daoInfo.current = { ...daoInfo.current, name: e.target.value };
-              }
+              daoInfo.current = { ...daoInfo.current, name: e.target.value };
             }}
             className="form-control"
             id="exampleInputEmail1"
@@ -42,9 +40,7 @@ const CreateChildDAO = ({ onCreateChildDAO }) => {
           <textarea
             type="name"
             onChange={(e) => {
-              {
-                daoInfo.current = { ...daoInfo.current, desc: e.target.value };
-              }
+              daoInfo.current = { ...daoInfo.current, desc: e.target.value };
             }}
             className="form-control"
             id="exampleInputEmail1"
@@ -60,9 +56,7 @@ const CreateChildDAO = ({ onCreateChildDAO }) => {
           <textarea
             type="name"
             onChange={(e) => {
-              {
-                daoInfo.current = { ...daoInfo.current, image: e.target.value };
-              }
+              daoInfo.current = { ...daoInfo.current, image: e.target.value };
             }}
             className="form-control"
             id="exampleInputEmail1"
@@ -160,13 +154,13 @@ const CreateChildDAO = ({ onCreateChildDAO }) => {
           type="button"
           onClick={() => {
             onCreateChildDAO(
-              daoInfo.current["dao_name"],
-              daoInfo.current["image"],
-              daoInfo.current["dao_description"],
-              daoInfo.current["yk_token_name"],
-              daoInfo.current["yk_token_symbol"],
-              daoInfo.current["voter_token_name"],
-              daoInfo.current["voter_token_symbol"]
+              daoInfo.current.name,
+              daoInfo.current.desc,
+              daoInfo.current.image,
+              daoInfo.current.YKTokenName,
+              daoInfo.current.YKTokenSymbol,
+              daoInfo.current.voterTokenName,
+              daoInfo.current.voterTokenSymbol
             );
           }}
           className="btn btn-primary"

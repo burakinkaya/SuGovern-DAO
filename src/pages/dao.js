@@ -681,8 +681,8 @@ export default function Dao() {
   //in order to deploy nw voter token and YK contracts we need to pass in the name and symbol of the tokens
   const createChildDAOFunc = async (
     dao_name,
-    image,
     dao_description,
+    image,
     yk_token_name,
     yk_token_symbol,
     voter_token_name,
