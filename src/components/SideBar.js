@@ -1,16 +1,20 @@
 import { redirect } from "next/dist/server/api-utils";
 import React, { Component, useState } from "react";
 import Button from "./Button";
+import { daodeployerWallet } from "../../constant";
 function Sidebar({
   setSelectedNavItem,
   selectedNavItem,
   status,
   ykBalance,
   voterBalance,
+  walletAddress,
+  isAdmin,
 }) {
   return status === "member" || status === "admin" ? (
     <div className="sidebar">
-      {status === "admin" && (
+      {/*//adminse*/}
+      {(isAdmin || ykBalance > 0) && (
         <ul className="nav flex-column my-2">
           <li className="nav-item">
             <h3 className="nav-link text-black">Administrative</h3>
@@ -26,7 +30,7 @@ function Sidebar({
               Create a SubDAO
             </p>
           </li>
-          {ykBalance > 0 && (
+          {(isAdmin || ykBalance > 0) && (
             <li className="nav-item">
               <p
                 className={
@@ -39,17 +43,20 @@ function Sidebar({
               </p>
             </li>
           )}
-          <li className="nav-item">
-            <p
-              className={
-                selectedNavItem === 2 ? "nav-link text-secondary" : "nav-link"
-              }
-              style={{ cursor: "pointer" }}
-              onClick={() => setSelectedNavItem(2)}
-            >
-              ClawBack Tokens
-            </p>
-          </li>
+
+          {walletAddress === daodeployerWallet && (
+            <li className="nav-item">
+              <p
+                className={
+                  selectedNavItem === 2 ? "nav-link text-secondary" : "nav-link"
+                }
+                style={{ cursor: "pointer" }}
+                onClick={() => setSelectedNavItem(2)}
+              >
+                ClawBack Tokens
+              </p>
+            </li>
+          )}
           {voterBalance > 0 && (
             <li className="nav-item">
               <p
@@ -109,7 +116,6 @@ function Sidebar({
           </li>
         </ul>
       )}
-      <br />
       <br />
       {status === "member" || status === "admin" ? (
         <ul className="nav flex-column my-2">

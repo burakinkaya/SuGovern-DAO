@@ -31,31 +31,38 @@ export default function Home() {
   const [alertMessage, setAlertMessage] = useState({ text: "", title: "" }); //this is used inside Popup component, to pass a message to the inside of the popup when an error occurs, or a transaction is successful, or in a case of warning
   const [popupTrigger, setPopupTrigger] = useState(false); //this is used inside Popup component, to trigger the popup to show up
   const [daoFactoryContract, setDaoFactoryContract] = useState(undefined); //to store the DAOFactory contract instance
-  const [all_daos, setall_daos] = useState([]); //to store all the DAOs created by the DAOFactory contract
+  const [daos, setDaos] = useState([]); //to store all the DAOs created by the DAOFactory contract
   const [topDAOAddress, setTopDAOAddress] = useState(""); //to store the address of the top DAO
   const [isCorrect, setIsCorrect] = useState(false); //this is used to change between the tabs, we will set it when a user clicks on the buttons on the sidebar, in default it is set to 10, which is the view proposals tab
-  const [loaded, setLoaded] = useState(false); //to check if the page is loaded, i.e. all the DAOs are fetched from the blockchain
+  const [isLoaded, setIsLoaded] = useState(false); //to check if the page is loaded, i.e. all the DAOs are fetched from the blockchain
 
   useEffect(() => {
-    if (!loaded) {
-      WalletConnect().then((res) => {
-        setAccount(res);
-        console.log("account is ", res);
-      });
-      setLoaded(true);
-      // if (!daoFactoryContract) {
-      //   setDaoFactoryContract(BindContract(FACTORY_JSON["abi"], DAO_ADDRESS))
-      // } else {
-      //   let res
-      //   if (all_daos.length === 0) {
-      //     console.log(daoFactoryContract)
-      //     fetchAllDaos(daoFactoryContract).then((result) => setall_daos(result))
-      //   } else {
-      //
-      //   }
-      // }
+    const init = async () => {
+      try {
+        const account = await WalletConnect();
+        setAccount(account);
+
+        const web3 = new Web3(window.ethereum);
+        const daoFactoryContract = new web3.eth.Contract(
+          FACTORY_JSON.abi,
+          DAO_ADDRESS
+        );
+
+        const fetchedDaos = await fetchAllDaos(daoFactoryContract);
+        setDaos(fetchedDaos);
+      } catch (error) {
+        console.error("Initialization error:", error);
+        setAlertMessage({ title: "Error", text: error.message });
+        setPopupTrigger(true);
+      } finally {
+        setIsLoaded(true);
+      }
+    };
+
+    if (!isLoaded) {
+      init();
     }
-  }, [daoFactoryContract, all_daos, loaded]);
+  }, [isLoaded]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,17 +78,22 @@ export default function Home() {
       </Head>
       <Header logged={account} />
       <div className="index-page">
-        {!loaded ? (
+        {!isLoaded ? (
           <Spinner></Spinner>
         ) : (
           <div>
             <div className={"top-dao"}>
-              <Card className="top-dao-card" address={TOP_DAO} />
+              {daos.length > 0 && (
+                <Card
+                  className={styles.topDaoCard}
+                  address={daos[0].daoAddress}
+                />
+              )}
             </div>
             <div className={"sub-dao"}>
               <SimpleGrid columns={LINE_COUNT} spacing={10}>
-                {SUB_DAOS.map((dao, index) => (
-                  <Card key={index} address={dao} />
+                {daos.slice(1).map((dao, index) => (
+                  <Card key={dao.daoAddress} address={dao.daoAddress} />
                 ))}
               </SimpleGrid>
             </div>

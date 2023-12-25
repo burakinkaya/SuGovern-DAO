@@ -121,55 +121,45 @@ async function fetchNextDaoId(contract) {
 
 async function fetchAllDaos(contract) {
   const web3 = new Web3(window.ethereum);
-  const numOfDaos = await fetchNextDaoId(contract);
-  //fetch the address of the top DAO
-  let res;
-  if (contract) {
-    await contract.methods
-      .top_dao()
-      .call()
-      .then((result) => {
-        res = result;
-      });
+  let topDaoAddress;
+
+  try {
+    topDaoAddress = await contract.methods.top_dao().call();
+  } catch (error) {
+    console.error("Error fetching top DAO address:", error);
+    // Handle the error appropriately
   }
-  let allDaos = [];
-  //fetch all the DAOs created by the DAOFactory contract
-  //fetch if the dao is deleted or not, if it is deleted, then we will not show it in the UI
-  //fetch the name and description of the DAOs
-  //push the DAOs to allDaos array
+
+  const numOfDaos = await contract.methods.next_dao_id().call();
+  const daoFetchPromises = [];
+
   for (let i = 0; i < numOfDaos; i++) {
-    let daoAddress, daoName, daoDescription, imageUrl;
-    await contract.methods
-      .all_daos(i)
-      .call()
-      .then((result) => {
-        daoAddress = result;
-      });
-    //check if the DAO is deleted or not, if it is deleted, then we will not show it in the UI
-    if (await DaoIsExist(daoAddress)) {
-      let daoContract = new web3.eth.Contract(DAO_JSON["abi"], daoAddress);
-      await daoContract.methods
-        .dao_name()
-        .call()
-        .then((result) => {
-          daoName = result;
-        });
-      await daoContract.methods
-        .dao_description()
-        .call()
-        .then((result) => {
-          daoDescription = result;
-        });
-      await daoContract.methods
-        .imageUrl()
-        .call()
-        .then((result) => {
-          imageUrl = result;
-        });
-      allDaos.push([daoAddress, daoName, daoDescription, imageUrl]);
-    }
+    daoFetchPromises.push(fetchDaoData(contract, i, web3));
   }
-  return allDaos;
+
+  const daos = await Promise.all(daoFetchPromises);
+  return daos.filter((dao) => dao); // Filter out null entries (deleted DAOs)
+}
+
+async function fetchDaoData(contract, index, web3) {
+  try {
+    const daoAddress = await contract.methods.all_daos(index).call();
+    if (!(await DaoIsExist(daoAddress))) {
+      return null; // DAO is deleted, so we return null to filter it out later
+    }
+
+    const daoContract = new web3.eth.Contract(DAO_JSON["abi"], daoAddress);
+    const [daoName, daoDescription, imageUrl] = await Promise.all([
+      daoContract.methods.dao_name().call(),
+      daoContract.methods.dao_description().call(),
+      daoContract.methods.imageUrl().call(),
+    ]);
+
+    return { daoAddress, daoName, daoDescription, imageUrl };
+  } catch (error) {
+    console.error(`Error fetching data for DAO at index ${index}:`, error);
+    return null; // In case of an error, return null to indicate failure
+  }
 }
 
 async function DaoInfo(contract, address) {

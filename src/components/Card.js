@@ -35,7 +35,7 @@ function Card({ address, key }) {
   return (
     <a href={`dao?address=${address}`}>
       {/* className="item-card-link"  */}
-      <div key={key} style={{ cursor: "pointer" }}>
+      <div style={{ cursor: "pointer" }}>
         <div className="item-card">
           <div
             className="image-container"

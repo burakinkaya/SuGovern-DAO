@@ -67,6 +67,8 @@ export default function Dao() {
   const [voterBalance, setVoterBalance] = useState(0);
 
   const [proposalStatuses, setProposalStatuses] = useState({});
+
+  const [isAdmin, setIsAdmin] = useState(false);
   //these are the data of the contracts that, we will use them in init() function
   //we will take the abi of the contracts from these files, and we will take the address of the contracts from the URL
   const setAlert = (err) => {
@@ -78,6 +80,20 @@ export default function Dao() {
       setWalletAddress(res);
       console.log("account is ", res);
     });
+    const checkIsAdmin = async (address) => {
+      // YK ayrıcalıklarını kontrol etmek için DAO kontratı kullanılıyor
+      if (contracts.daoContract && walletAddress) {
+        try {
+          const hasPriviliges = await contracts.daoContract.methods
+            .has_yk_priviliges(walletAddress)
+            .call();
+          setIsAdmin(hasPriviliges);
+          console.log("priviliges is ", hasPriviliges);
+        } catch (error) {
+          console.error("Error checking YK privileges:", error);
+        }
+      }
+    };
     if (address) {
       if (!contracts["daoFactoryContract"]) {
         setContracts((prevState) => ({
@@ -193,6 +209,7 @@ export default function Dao() {
               setInitialized(true);
             }
           }
+          checkIsAdmin(address);
         }
       }
     }
@@ -1060,10 +1077,13 @@ export default function Dao() {
       ></VoteOnProposals>
     ) : selectedNavItem === 10 ? (
       <Proposals
+        ykBalance={ykBalance}
+        voterBalance={voterBalance}
         onGetAllProposals={getAllProposals}
         onhandleAcceptClick={handleAcceptClick}
         onhandleRejectClick={handleRejectClick}
         onhandlePendingClick={handlePendingClick}
+        isAdmin={isAdmin}
       ></Proposals>
     ) : selectedNavItem === 11 ? (
       <ViewSubDAOs
@@ -1111,6 +1131,8 @@ export default function Dao() {
                 status={"admin"}
                 ykBalance={ykBalance}
                 voterBalance={voterBalance}
+                walletAddress={walletAddress}
+                isAdmin={isAdmin}
               />
               <div className="container" style={{ padding: "30px" }}>
                 <div className="row">

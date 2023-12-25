@@ -7,6 +7,7 @@ export const RPC =
   "https://polygon-mumbai.g.alchemy.com/v2/qk87xs0xeViFziM8xyAckMpVat-e_32T";
 export const TOP_DAO = "0x619141AC44a77B126B774a40a966891ca7754937";
 export const SUB_DAOS = [];
+export const daodeployerWallet = "0x8ca0b191825f09252117932a23331f40b1bde09c";
 export const params = [
   {
     chainName: "Mumbai Testnet",
@@ -30,4 +31,5 @@ export const CONSTANT_DICT = {
   SUB_DAOS: SUB_DAOS,
   params: params,
   CHAIN_ID: CHAIN_ID,
+  daodeployerWallet: daodeployerWallet,
 };

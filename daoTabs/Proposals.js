@@ -15,10 +15,13 @@ const TextBoxProposal = styled.div`
 `;
 
 const Proposals = ({
+  ykBalance,
+  voterBalance,
   onGetAllProposals,
   onhandleAcceptClick,
   onhandleRejectClick,
   onhandlePendingClick,
+  isAdmin,
 }) => {
   const [all_proposals, setall_proposals] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -97,11 +100,21 @@ const Proposals = ({
               >
                 Collapse
               </button>
-              <button onClick={() => onhandleAcceptClick(index)}>Accept</button>
-              <button onClick={() => onhandleRejectClick(index)}>Reject</button>
-              <button onClick={() => onhandlePendingClick(index)}>
-                Pending
-              </button>
+              {(isAdmin || ykBalance > 0) && (
+                <button onClick={() => onhandleAcceptClick(index)}>
+                  Accept
+                </button>
+              )}
+              {(isAdmin || ykBalance > 0) && (
+                <button onClick={() => onhandleRejectClick(index)}>
+                  Reject
+                </button>
+              )}
+              {(isAdmin || ykBalance > 0) && (
+                <button onClick={() => onhandlePendingClick(index)}>
+                  Pending
+                </button>
+              )}
             </div>
           </div>
           <div className="row">
